@@ -31,6 +31,7 @@ Add-reservation-form
     date_end (datetime),
 
 Confirm-reservation-form
+    Room(choiceList(Rooms(filter: !(date_start - date_end), Room.number_of_persons <= number_of_persons))),
     admin_confirmed (checkbox)
 
 DATA STRUCTURE:
