@@ -10,6 +10,8 @@ class User extends Model
 
     protected $fillable = ['name', 'email', 'password', 'date_birth', 'phone', 'role'];
 
+    protected $attributes = ['role' => 'customer'];
+
     /**
      * Get the reservations for the user.
      */

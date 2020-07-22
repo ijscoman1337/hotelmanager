@@ -33,5 +33,10 @@ class Reservation extends Model
         'payment_confirmed',
         'user_id',
         'room_íd'
-        ];
+    ];
+
+    protected $attributes = [
+        'admin_confirmed' => false,
+        'payment_confirmed' => false,
+    ];
 }
