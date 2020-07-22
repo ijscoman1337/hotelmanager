@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateArticlesTable extends Migration
+class ReservationsBelongsToUsersRooms extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,9 @@ class CreateArticlesTable extends Migration
      */
     public function up()
     {
-        Schema::create('articles', function (Blueprint $table) {
-            $table->id();
-            $table->string('title');
-            $table->timestamps();
-            // and not defined here but in the model: is supposed to have many paragraphs as a relation
-
+        Schema::table('reservations', function (Blueprint $table) {
+            $table->foreignId('room_id')->nullable()->constrained('rooms');
+            $table->foreignId('user_id')->nullable()->constrained('users');
         });
     }
 
@@ -29,6 +26,8 @@ class CreateArticlesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('articles');
+        Schema::table('users_rooms', function (Blueprint $table) {
+            //
+        });
     }
 }

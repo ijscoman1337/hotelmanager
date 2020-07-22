@@ -15,6 +15,13 @@ class CreateUsersTable extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
+            $table->string('name');
+            $table->string('email');
+            $table->string('password');
+            $table->dateTime('date_birth');
+            $table->string('phone');
+            $table->string('role')->default('customer');
+            // and not defined here but in the model: is supposed to have many reservations as a relation
             $table->timestamps();
         });
     }

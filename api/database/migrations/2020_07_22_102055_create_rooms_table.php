@@ -15,7 +15,11 @@ class CreateRoomsTable extends Migration
     {
         Schema::create('rooms', function (Blueprint $table) {
             $table->id();
+            $table->integer('people_count');
+            $table->float('price_per_night');
             $table->timestamps();
+            // and not defined here but in the model: is supposed to have many reservations as a relation
+
         });
     }
 

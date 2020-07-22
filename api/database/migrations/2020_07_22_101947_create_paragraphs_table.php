@@ -16,6 +16,11 @@ class CreateParagraphsTable extends Migration
         Schema::create('paragraphs', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
+            $table->string('title')->nullable();
+            $table->string('description')->nullable();
+            $table->string('image')->nullable();
+            $table->foreignId('article_id')->constrained('articles');
+
         });
     }
 

@@ -25,7 +25,6 @@ class CreateReservationsTable extends Migration
             $table->boolean('admin_confirmed')->default(false);
             $table->integer('price_total');
             $table->integer('payment_confirmed')->default(false);
-//            $table->foreignId('room_id')->nullable();
         });
     }
 
