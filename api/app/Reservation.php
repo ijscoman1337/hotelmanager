@@ -30,6 +30,8 @@ class Reservation extends Model
         'date_checkout',
         'admin_confirmed',
         'price_total',
-        'payment_confirmed'
+        'payment_confirmed',
+        'user_id',
+        'room_íd'
         ];
 }
