@@ -8,7 +8,7 @@ class Article extends Model
 {
     protected $table = 'articles';
 
-    protected $fillable = ['title'];
+    protected $guarded = ['title'];
 
     /**
      * Get the paragraphs for the article.

@@ -8,7 +8,7 @@ class Room extends Model
 {
     protected $table = 'rooms';
 
-    protected $fillable = ['people_count', 'price_per_night'];
+    protected $guarded = ['people_count', 'price_per_night'];
 
     /**
      * Get the reservations for the room.

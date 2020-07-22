@@ -21,7 +21,7 @@ class Reservation extends Model
 
     protected $table = 'reservations';
 
-    protected $fillable = [
+    protected $guarded = [
         'fullname',
         'email',
         'date_birth',
