@@ -40,5 +40,6 @@ Route::group([
 });
 
 //ARTICLES
-Route::get('profile', ['middleware' => 'auth', 'uses' => 'ProfileController@show']);
+// 1. De applicatie moet een landingspagina hebben waarop het hotel wordt ingeleid.
+Route::get('home', 'ApiController@getHomepage');
 
