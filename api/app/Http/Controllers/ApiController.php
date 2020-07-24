@@ -6,7 +6,10 @@ use App\Reservation;
 use App\Room;
 use DateTime;
 use Exception;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ApiController extends Controller
 {
@@ -91,7 +94,9 @@ class ApiController extends Controller
                 }
             }
             $newReservation->room_id = $request->room_id;
+            //TODO: calculate total price
         }
+
 
         $newReservation->save();
 
@@ -99,6 +104,21 @@ class ApiController extends Controller
                 'message' => 'Successfully created reservation!',
             ], 201);
     }
+
+    //5. De klant kan kiezen uit verschillende kamers.
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    function getRooms(Request $request){
+
+        return response()->json([
+            'data' => Room::all(),
+        ], 201);
+    }
+
+
 
 
 }

@@ -36,16 +36,20 @@ Route::get('home', 'ApiController@getHomepage');
 //RESERVATIONS
 Route::post('makereservation', 'ApiController@makeReservation');
 
+//ROOMS
+Route::prefix('rooms')->group(function() {
+
+    Route::post('get', 'ApiController@getAllRooms');
+});
 
 //ADMIN
-
 Route::group(
     ['middleware' => 'auth:api'],
     function() {
         Route::middleware('is.admin')->group(function(){
             Route::prefix('admin')->group(function(){
-                Route::get('getreservation','AdminController@getReservation')
-                    ->middleware('is.admin');
+                Route::get('getreservation','AdminController@getReservation');
+                Route::post('confirmreservation','AdminController@confirmreservation');
 
             });
         });
