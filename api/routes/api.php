@@ -56,3 +56,19 @@ Route::group(
     }
 );
 
+//CUSTOMER
+Route::group(
+    ['middleware' => 'auth:api'],
+    function() {
+        Route::middleware('is.customer')->group(function(){
+            Route::prefix('user')->group(function(){
+                Route::get('reservations','ApiController@getReservationsByUser');
+            });
+        });
+    }
+);
+
+//
+Route::get('rooms','ApiController@getRooms');
+
+

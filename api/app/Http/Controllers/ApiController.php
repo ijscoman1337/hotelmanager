@@ -4,12 +4,11 @@ namespace App\Http\Controllers;
 use App\Article;
 use App\Reservation;
 use App\Room;
+use App\User;
 use DateTime;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class ApiController extends Controller
 {
@@ -65,8 +64,6 @@ class ApiController extends Controller
             throw new Exception("It appears you are trying to make a reservation for 0 nights");
         }
 
-        // TODO: figure out how to retrieve user id from session if available
-
         $newReservation = new Reservation([
             'fullname' => $request->fullname,
             'email' => $request->email,
@@ -83,42 +80,75 @@ class ApiController extends Controller
         // adding the given room to the reservation
         if($request->room_id){
             $reservations = Reservation::where('room_id', '=', $request->room_id)->get();
+            //TODO: A more elegant way to do this is to figure out how to use eloquent to make a query for this
             foreach ($reservations as $reservation){
                 if(
                     !($newReservation->date_checkin >= $reservation->date_checkout) ||
                     !($newReservation->date_checkout <= $reservation->date_checkout)
                 ) {
-                    throw new Exception(
-                        'It seems that your reservation is overlapping one or more reservations on this room'
-                    );
+                    $newReservation->admin_confirmed = 2;
                 }
             }
             $newReservation->room_id = $request->room_id;
-            //TODO: calculate total price
-        }
 
+            $newReservation->price_total = $nights * Room::find($request->room_id)->price_per_night;
+        }
 
         $newReservation->save();
 
-            return response()->json([
-                'message' => 'Successfully created reservation!',
-            ], 201);
+        return response()->json([
+            'message' => 'Successfully created reservation!',
+        ], 201);
     }
 
     //5. De klant kan kiezen uit verschillende kamers.
-
     /**
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
     function getRooms(Request $request){
 
+        $query = Room::query();
+        // 1. De kamers zijn te filteren op het aantal personen en de datum die door de klant is
+        // gekozen.
+        if ($request->people_count) {
+            $query = $query->where('people_count', $request->people_count);
+        }
+
+        if ($request->date_checkin && $request->date_checkout) {
+            $query = $query->whereHas('reservations', function (Builder $query) use ($request) {
+
+                $date_checkin = (new DateTime($request->date_checkin))->format("Y-m-d H:i:s");
+                $date_checkout =(new DateTime($request->date_checkout))->format("Y-m-d H:i:s");
+                $query->where('date_checkin', '>=', $date_checkout);
+                $query->orWhere('date_checkout', '<=', $date_checkin);
+            });
+        }
+
+        $results = $query->get();
+
+
         return response()->json([
-            'data' => Room::all(),
+            'data' => $results,
         ], 201);
     }
 
+    // 2. De klant kan inloggen op de website van het hotel en kan zijn reserveringen inzien.
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    function getReservationsByUser(Request $request){
+        /** @var User $user */
+        $user = $request->user();
+        $reservations = Reservation::where('user_id', '=', $user->id)
+            ->orWhere('email', '=', $user->email)
+            ->get();
 
-
+        return response()->json([
+            'data' => $reservations,
+            'email' => $user->email
+        ], 201);
+    }
 
 }

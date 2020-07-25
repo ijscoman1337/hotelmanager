@@ -30,7 +30,8 @@ class AdminController extends Controller
     function confirmreservation(Request $request){
         /** @var Reservation $reservation */
         $reservation = Reservation::find($request->get("reservation_id"));
-        $reservation->admin_confirmed = $request->get('confirm') ? 1 : 0;
+        //TODO: would probably be nice to use an Enum for this somehow
+        $reservation->admin_confirmed = $request->get('confirm') ? 1 : 2;
         $reservation->save();
 
         return response()->json([
