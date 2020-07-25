@@ -18,6 +18,7 @@ class IsUserAdmin{
         if($request->user()->role != "admin"){
             throw new \Exception("Looks like you are not allowed to look on this page, you noughty boy");
         }
+
         return $next($request);
     }
 }

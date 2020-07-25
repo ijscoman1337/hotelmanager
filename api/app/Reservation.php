@@ -20,7 +20,6 @@ class Reservation extends Model
 {
 
     protected $table = 'reservations';
-
     protected $fillable = [
         'fullname',
         'email',
@@ -36,23 +35,10 @@ class Reservation extends Model
         'people_count',
         'nights_count'
     ];
-
     protected $attributes = [
         'admin_confirmed' => false,
         'payment_confirmed' => false,
         'price_total' => 0,
     ];
-
-    /**
-     * Set the user's first name.
-     *
-     * @param  string|Room  $value
-     * @return void
-     */
-    public function setRoomId($room_id)
-    {
-
-    }
-
 
 }

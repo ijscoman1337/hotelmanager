@@ -18,7 +18,7 @@ class AdminController extends Controller
         /** @var Reservation $reservation */
         $reservation = Reservation::find($request->get("reservation_id"));
         return response()->json([
-            'data' => $reservation,
+            'result' => $reservation,
         ], 201);
     }
 
@@ -31,8 +31,13 @@ class AdminController extends Controller
         /** @var Reservation $reservation */
         $reservation = Reservation::find($request->get("reservation_id"));
         //TODO: would probably be nice to use an Enum for this somehow
+        // 0 = not processed 1 = confirmed 2 = denied
         $reservation->admin_confirmed = $request->get('confirm') ? 1 : 2;
         $reservation->save();
+        //3. De bevestiging na de reservering bevat een factuur opgemaakt in PDF.
+        //TODO: there's two ways we can do this. We can either refer to a helper class directly from here, but
+        //a more elegant solution would probably be to listen to one of the lifecycle events from Eloquent to
+        //trigger the appropiate method in aforementioned helper class so we make this event as reusable as we possibly can
 
         return response()->json([
             'message' => "reservation was " . ($reservation->admin_confirmed === 1 ? 'confirmed' : 'denied')

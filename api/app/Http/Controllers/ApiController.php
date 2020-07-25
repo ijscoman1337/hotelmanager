@@ -15,7 +15,6 @@ class ApiController extends Controller
 
     // 1. De applicatie moet een landingspagina hebben waarop het hotel wordt ingeleid.
     // In other words: get the article with all its paragraphs and return it in JSON
-
     /**
      * @return \Illuminate\Http\JsonResponse
      */
@@ -25,14 +24,13 @@ class ApiController extends Controller
             ->get();
 
         return response()->json([
-            'articles' => $articles,
+            'results' => $articles,
         ]);
     }
 
     // 2. Op de reserveringspagina moet de klant zijn naam, emailadres, geboortedatum,
     // telefoonnummer (optioneel), aantal personen en gewenste datum en eventuele
     // opmerkingen invullen.
-
     /**
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
@@ -79,8 +77,8 @@ class ApiController extends Controller
         // if a room id came with this request, there is a couple of things we must check before we can actually justify
         // adding the given room to the reservation
         if($request->room_id){
-            $reservations = Reservation::where('room_id', '=', $request->room_id)->get();
             //TODO: A more elegant way to do this is to figure out how to use eloquent to make a query for this
+            $reservations = Reservation::where('room_id', '=', $request->room_id)->get();
             foreach ($reservations as $reservation){
                 if(
                     !($newReservation->date_checkin >= $reservation->date_checkout) ||
@@ -89,8 +87,8 @@ class ApiController extends Controller
                     $newReservation->admin_confirmed = 2;
                 }
             }
-            $newReservation->room_id = $request->room_id;
 
+            $newReservation->room_id = $request->room_id;
             $newReservation->price_total = $nights * Room::find($request->room_id)->price_per_night;
         }
 
@@ -125,11 +123,10 @@ class ApiController extends Controller
             });
         }
 
-        $results = $query->get();
-
+        $rooms = $query->get();
 
         return response()->json([
-            'data' => $results,
+            'results' => $rooms,
         ], 201);
     }
 
@@ -146,9 +143,7 @@ class ApiController extends Controller
             ->get();
 
         return response()->json([
-            'data' => $reservations,
-            'email' => $user->email
+            'results' => $reservations,
         ], 201);
     }
-
 }

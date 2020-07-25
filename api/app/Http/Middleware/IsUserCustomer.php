@@ -17,6 +17,7 @@ class IsUserCustomer{
         if($request->user()->role != "customer"){
             throw new \Exception("Looks like you are not allowed to look on this page, you noughty boy");
         }
+
         return $next($request);
     }
 }
