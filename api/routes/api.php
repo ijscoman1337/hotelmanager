@@ -28,20 +28,12 @@ Route::group([
     });
 });
 
-
 //HOME
 Route::get('home', 'ApiController@getHomepage');
-
-
 //RESERVATIONS
 Route::post('makereservation', 'ApiController@makeReservation');
-
 //ROOMS
-Route::prefix('rooms')->group(function() {
-
-    Route::post('get', 'ApiController@getAllRooms');
-});
-
+Route::get('rooms','ApiController@getRooms');
 //ADMIN
 Route::group(
     ['middleware' => 'auth:api'],
@@ -55,7 +47,6 @@ Route::group(
         });
     }
 );
-
 //CUSTOMER
 Route::group(
     ['middleware' => 'auth:api'],
@@ -68,7 +59,5 @@ Route::group(
     }
 );
 
-//
-Route::get('rooms','ApiController@getRooms');
 
 
